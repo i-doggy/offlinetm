@@ -38,8 +38,9 @@
 		<script src='pureClasses.js'></script>
 		<script src='script.js'></script>
 		<script>
+			var ad = true;
 			var mt = ['task1', 'task2', 'task3'].map(function(e) { return new RealTask(e); });
-			var mt2 = ['task4', 'task5', 'task6'].map(function(e) { return new RealTask(e, 1); });
+			var mt2 = ['task4', 'task5', 'task6'].map(function(e) { return new RealTask(e, ad); });
 			
 			var subgroup = new RealTaskGroup(false, 'group2', mt2[0], mt2[1], mt2[2]);
 			var v = new RealTaskGroup(true, 'group1', mt[0], mt[1], mt[2], subgroup);
