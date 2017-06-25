@@ -1,0 +1,94 @@
+﻿body {
+	margin: 0 20%;
+}
+.checked { 
+	background: skyblue;
+}
+.additional {
+	background: green;
+}
+.checked.additional { 
+	background: greenyellow;
+}
+progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+progress[value]::-webkit-progress-value {
+  background-color: skyblue;
+    border-radius: 2px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+progress[value] {
+	width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+		  -webkit-
+  border: none;
+  height: 20px;
+}
+article, section {
+	padding: 1em;
+	border: 2px solid gray;
+	border-radius: 5px;
+	//border: 1px solid red;
+	background: #1840D4;
+	margin: 1em 0;
+}
+li { 
+	padding: 0;
+	margin: 0.3em;
+}
+li.task {
+	border: 2px solid gray;
+}
+ul {
+	list-style-type: disc;
+	padding-left: 1.5em;
+}
+h1 {
+	margin: 0.5em 0;
+}
+.task {
+	padding: 0.5em;
+}
+.task .checkbox {
+	position: relative;
+	display: inline-block;
+	border: 2px solid black;
+	width: 1.5em;
+	height: 1.5em;
+	vertical-align: middle;
+	margin-right: 1em;
+	text-align: center;
+}
+.task .deletebox {
+	display: inline-block;
+	float: right;
+	width: 1.5em;
+	height: 1.5em;
+	cursor: default;
+	border: 2px solid black;
+	color: red;
+	font-weight: 300;
+	text-align: center;
+	vertical-align: middle;
+}
+.task .deletebox:hover {
+	background: red;
+	color: white;
+}
+.checkbox > span {
+	display: none;
+}
+.checked .checkbox > span {
+    font-size: 28pt;
+	bottom: -0.1em;
+	color: blue;
+	position: absolute;
+	left: 0;
+	display: inline;
+	cursor: default;
+}

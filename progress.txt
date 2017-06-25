@@ -1,0 +1,12 @@
+﻿/* 
+The standard of the type of Working Statistics file is following: 
+Project definition: 
+Project *codename* "*description*" 
+
+data line: 
+*codename* *date* *amountOfWorkTime* *amountOfCode*; 
+*/ 
+
+Project offlineTaskManagerHTML "An inner-used offline task manager.";
+
+offlineTaskManagerHTML 25/06/2017 60 78
