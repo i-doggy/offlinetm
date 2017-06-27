@@ -1,14 +1,16 @@
 ﻿body {
 	margin: 0 20%;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
 }
 .checked { 
-	background: skyblue;
+	background: linear-gradient(to left, white, skyblue) !important;
 }
 .additional {
-	background: green;
+	//background: linear-gradient(to left, white, green) !important;
 }
 .checked.additional { 
-	background: greenyellow;
+	background: linear-gradient(to left, white, greenyellow);
 }
 progress[value]::-webkit-progress-bar {
   background-color: #eee;
@@ -30,29 +32,72 @@ progress[value] {
   height: 20px;
 }
 article, section {
-	padding: 1em;
-	border: 2px solid gray;
-	border-radius: 5px;
-	//border: 1px solid red;
-	background: #1840D4;
-	margin: 1em 0;
+	position: relative;
+	/* padding: 1em; */
+    border: none;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+    /* border-radius: 5px; */
+    /* background: #1840D4; */
+    margin: 1em 0;
+    padding: 0;
+}
+section > .deletebox {
+	top: 0;
+	right: 0;
 }
 li { 
 	padding: 0;
-	margin: 0.3em;
+	margin: 0;
+	border-bottom: 1px solid black;
+	position: relative;
+	box-shadow: inset 0px 3px 10px rgba(0,0,0,0.5);
 }
 li.task {
-	border: 2px solid gray;
+	/* border-top: 1px solid black; */
+	
 }
 ul {
-	list-style-type: disc;
-	padding-left: 1.5em;
+	list-style-type: none;
+    /* padding-left: 1.5em; */
+	border-top: 1px solid black;
+    padding: 0;
+    margin: 0px;
 }
 h1 {
-	margin: 0.5em 0;
+	    margin: 0;
+    padding: 0.5em 0;
+    padding-top: 1em;
+    /* border-bottom: 1px solid black; */
+    /* border-top: 1px solid black; */
+    text-align: center;
+}
+h1 > input {
+	border: none;
+	width: 90%;
+	background: transparent;
+	text-align: center;
+	font: inherit;
 }
 .task {
 	padding: 0.5em;
+	display: grid;
+	grid-template-areas: "c a i d";
+	grid-template-columns: 3em 0.5em 1fr 2em;
+	background: linear-gradient(to left, white, #C9C9C9);
+}
+.task > input {
+	color: black;
+	margin: auto 1.5em;
+	background: transparent;
+	min-height: 1.1em;
+	height: 1.1em;
+	-webkit-apperance: none;
+	font: inherit;
+	font-size: inherit;
+	border: none;
+	overflow: hidden;
+	grid-area: i;
 }
 .task .checkbox {
 	position: relative;
@@ -60,28 +105,41 @@ h1 {
 	border: 2px solid black;
 	width: 1.5em;
 	height: 1.5em;
-	vertical-align: middle;
-	margin-right: 1em;
 	text-align: center;
 }
-.task .deletebox {
-	display: inline-block;
-	float: right;
-	width: 1.5em;
-	height: 1.5em;
+.task .checkbox {
+	margin: auto;
+	grid-area: c;
+}
+.task .additionalbox {
+	//margin: auto -5px;
+	grid-area: a;
+}
+.deletebox {
+	grid-area: d;
+	position: absolute;
+	width: 1.3em;
+	height: 1.3em;
 	cursor: default;
-	border: 2px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
 	color: red;
-	font-weight: 300;
 	text-align: center;
-	vertical-align: middle;
+	top: -0.5em;
+	right: -0.5em;
 }
-.task .deletebox:hover {
+.deletebox:hover {
 	background: red;
 	color: white;
 }
 .checkbox > span {
 	display: none;
+}
+.additionalbox  {
+font-size: 28pt;
+	color: darkolivegreen;
+	font-weight: bold;
+	cursor: default;
 }
 .checked .checkbox > span {
     font-size: 28pt;
@@ -91,4 +149,49 @@ h1 {
 	left: 0;
 	display: inline;
 	cursor: default;
+}
+.additional .additionalbox {
+	   font-size: 28pt;
+    text-shadow: green 0px 0px 10px;
+    font-weight: 900;
+    cursor: default;
+    color: green;
+}
+.plus {
+	font-size: 20pt;
+	text-align: center;
+	border-bottom: none;
+	padding: 0.5em;
+	font-weight: bold;
+	display: grid;
+}
+.plus:hover {
+	grid-template-columns: 33.5% 33% 33%;
+}
+
+.plus span {
+	display: none;
+	cursor: default;
+}
+.plus .spec {
+	display: inline;
+}
+.plus:hover span {
+	display: inline;
+}
+.plus:hover span:hover {
+	text-shadow: green 0px 0px 1em;
+}
+section.hidden ul {
+	display: none;
+	cursor: default;
+}
+.hider {
+	display: inline-block;
+}
+.hider {
+	transform: rotate(-90deg);
+}
+section.hidden .hider {
+	transform: rotate(90deg);
 }

@@ -30,6 +30,16 @@ Task.prototype.toggleDone = function() {
 	else this.done = true;
 	return this.done;
 };
+Task.prototype.toggleAdditional = function() {
+	if(this.isAdditional) this.isAdditional = false;
+	else this.isAdditional = true;
+	return this.isAdditional;
+};
+Task.prototype.newName = function(newName) {
+	if(nameIsValid(name)) this.name = newName;
+}
+
+function nameIsValid(name) { if(name.toUpperCase) return true; }
 
 function TaskGroup(name) {
 	if(name) this.name = name;
@@ -53,17 +63,24 @@ function TaskGroup(name) {
 	
 	Object.defineProperty(this, 'length', { get: getLength });
 	
+	this._ChangeHandler = this._ChangeHandler.bind(this);
+	this._StateChangeHandler = this._StateChangeHandler.bind(this);
+	
 	this.additionalLength = 0;
-	this.child = [].slice.call(arguments, 1).map(this.addTask, this);
+	this.child = [];
+	[].slice.call(arguments, 1).map(this.addTask, this);
 }
 
-TaskGroup.prototype.addTask = function (t) {
+TaskGroup.prototype.addTask = function (t, index) {
 		//Add event listeners
 		t.onchange.push(this._ChangeHandler);
 		t.onstateChange.push(this._StateChangeHandler);
 		//Manage additional length
 		if(t.isAdditional) this.additionalLength++;
 		if(t.additionalLength) this.additionalLength = this.additionalLength + t.additionalLength;
+		//Actually add
+		if(index !== undefined && index.inRange(-(this.child.length), this.child.length)) this.child.splice(index, 0, t);
+		else this.child.push(t);
 		//Return added
 		return t;
 }
@@ -135,4 +152,19 @@ function findItemAndDelete(array, item) {
 Number.prototype.inRange = function(start, end) {
 	if(this > start && this < end) return true;
 	else return false;
+}
+
+Task.prototype.getSaveData = function() {
+	var c = [this.name, this.done, this.isAdditional];
+	return c;
+}
+
+TaskGroup.prototype.getSaveData = function() {
+	var c = {}
+	c[this.name] = this.child.map(function(e) { return e.getSaveData(); });
+	return c;
+}
+
+TaskGroup.prototype.newName = function(newName) {
+	if(nameIsValid(name)) this.name = newName;
 }
