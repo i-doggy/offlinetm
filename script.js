@@ -115,6 +115,8 @@ RealTaskGroup.prototype.addTask = function (t, index) {
 		if(this.element) {
 			if(index !== undefined && index.inRange(-this.child.length, this.child.length)) this.element.ul.insertBefore(t.element, this.child[index].element);
 			else this.element.ul.append(t.element);
+			this.renderProgress();
+			fireEvent(this, 'onchange', t.done);
 		}
 		return res;
 }
@@ -150,11 +152,16 @@ document.body.addEventListener('click', function(e) {
 	
 	if(e.target.classList.contains('deletebox')) liel = e.target.parentNode;
 	if(liel) {
-		var s = liel.closest('SECTION')
-		if(liel.task)s.taskgroup.deleteTaskObj(liel.task);
-		if(liel.taskgroup) s.taskgroup.deleteTaskObj(liel.taskgroup);
-		liel.hidden = true;
-		liel.style.display = 'none';
+		if(!liel.taskgroup) {
+			var s = liel.closest('SECTION')
+			if(liel.task) s.taskgroup.deleteTaskObj(liel.task);
+		}
+		else {
+			var s = liel.parentNode.closest('SECTION');
+			if(s)
+				if(liel.taskgroup) s.taskgroup.deleteTaskObj(liel.taskgroup);
+		}
+		liel.remove();
 		return;
 	}
 	
@@ -189,6 +196,13 @@ document.body.addEventListener('click', function(e) {
 			return;
 		}
 	}
+	if(e.target.classList.contains('newlist')) {
+		var z = e.target;
+		var t = new RealTaskGroup('List');
+		document.body.append(t.element);
+		document.body.append(z);
+		return;
+	}
 });
 
 document.body.addEventListener('change', function(e) {
@@ -203,12 +217,13 @@ function loadSavedData(str) {
 
 function run(obj) {
 		return Object.keys(obj).reduce(function(p, e) {
-			var r = new RealTaskGroup(false, e);
+			var r = new RealTaskGroup(e);
 			var buf = obj[e].map(function(e1) {
 				if(Array.isArray(e1)) return new RealTask(e1[0], e1[1], e1[2]);
 				else return (run(e1));
 			});
 			buf.forEach(function(e2) { r.addTask(e2); });
+			r._createElement();
 			return r;
 		}, 0);
 	}

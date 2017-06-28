@@ -31,7 +31,7 @@ progress[value] {
   border: none;
   height: 20px;
 }
-article, section {
+section {
 	position: relative;
 	/* padding: 1em; */
     border: none;
@@ -39,8 +39,10 @@ article, section {
 	border-bottom: 1px solid black;
     /* border-radius: 5px; */
     /* background: #1840D4; */
-    margin: 1em 0;
     padding: 0;
+}
+body > section {
+	margin: 1em 0;
 }
 section > .deletebox {
 	top: 0;
@@ -158,11 +160,10 @@ font-size: 28pt;
     color: green;
 }
 .plus {
-	font-size: 20pt;
+	font-size: 15pt;
 	text-align: center;
 	border-bottom: none;
 	padding: 0.5em;
-	font-weight: bold;
 	display: grid;
 }
 .plus:hover {
@@ -175,6 +176,8 @@ font-size: 28pt;
 }
 .plus .spec {
 	display: inline;
+	font-size: 20pt;
+	font-weight: bold;
 }
 .plus:hover span {
 	display: inline;
@@ -187,6 +190,7 @@ section.hidden ul {
 	cursor: default;
 }
 .hider {
+	cursor: default;
 	display: inline-block;
 }
 .hider {
@@ -194,4 +198,13 @@ section.hidden ul {
 }
 section.hidden .hider {
 	transform: rotate(90deg);
+}
+.newlist {
+	font-size: 15pt;
+	font-weight: ;
+	text-align: center;
+}
+.newlist:hover {
+	text-shadow: green 0px 0px 1em;
+	cursor: default;
 }

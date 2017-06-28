@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE HTML>
-<html>
+<html manifest='tm.cache'>
 	<head>
 		<title>Your tasks</title>
 		<link rel='stylesheet' href='style.css'>
@@ -43,8 +43,45 @@
 		</section-->
 		<script src='pureClasses.js'></script>
 		<script src='script.js'></script>
-		<script>
-			var ad = false;
+		<script defer>
+			console.log(window.localStorage.getItem('index'));
+			var saved = parseInt(window.localStorage.getItem('index'), 10);
+			if(saved) {
+				var i = 0;
+				for(;i < saved; i++) {
+					var z = window.localStorage.getItem(i.toString());
+					if(z) {
+						var l = loadSavedData(z);
+						document.body.append(l.element);
+					}
+				}
+			}
+			else {
+				var z = new RealTaskGroup('Group');
+				document.body.append(z.element);
+			}
+			document.body.append(addNewList());
+			
+			document.body.onbeforeunload = function obu(e) {
+				window.localStorage.clear();
+				var save = [].filter.call(document.body.children, function(e) {
+					return e.tagName == 'SECTION'; 
+				}).map(function(e) { 
+					return JSON.stringify(e.taskgroup.getSaveData());
+				});
+				save.forEach(function(e, i) { window.localStorage.setItem(i.toString(), e); });
+				window.localStorage.setItem('index', save.length);
+				console.log('huina');
+			};
+			
+			function addNewList() {
+				var s = document.createElement('DIV');
+				s.innerText = 'Add new list';
+				s.classList.add('newlist');
+				return s;
+			}
+		
+			/*var ad = false;
 			var constr = RealTask;
 			var constr2 = RealTaskGroup;
 			var mt = ['task1', 'task2', 'task3'].map(function(e) { return new constr(e); });
@@ -52,7 +89,7 @@
 			
 			var subgroup = new constr2('group2', mt2[0], mt2[1], mt2[2]);
 			var v = new constr2('group1', mt[0], mt[1], mt[2], subgroup);
-			document.body.append(v.element);
+			document.body.append(v.element);*/
 			
 			document.body.addEventListener('dragstart', function(e) {
 				e.target.id = '__drag__';
