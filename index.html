@@ -44,7 +44,7 @@
 		<script src='pureClasses.js'></script>
 		<script src='script.js'></script>
 		<script defer>
-			console.log(window.localStorage.getItem('index'));
+			//Load
 			var saved = parseInt(window.localStorage.getItem('index'), 10);
 			if(saved) {
 				var i = 0;
@@ -57,10 +57,11 @@
 				}
 			}
 			else {
-				var z = new RealTaskGroup('Group');
+				var z = new RealTaskGroup('List1');
 				document.body.append(z.element);
 			}
 			document.body.append(addNewList());
+			//Loaded
 			
 			document.body.onbeforeunload = function obu(e) {
 				window.localStorage.clear();
@@ -80,45 +81,6 @@
 				s.classList.add('newlist');
 				return s;
 			}
-		
-			/*var ad = false;
-			var constr = RealTask;
-			var constr2 = RealTaskGroup;
-			var mt = ['task1', 'task2', 'task3'].map(function(e) { return new constr(e); });
-			var mt2 = ['task4', 'task5', 'task6'].map(function(e) { return new constr(e, ad); });
-			
-			var subgroup = new constr2('group2', mt2[0], mt2[1], mt2[2]);
-			var v = new constr2('group1', mt[0], mt[1], mt[2], subgroup);
-			document.body.append(v.element);*/
-			
-			document.body.addEventListener('dragstart', function(e) {
-				e.target.id = '__drag__';
-				//e.dataTransfer.setData('text', '__drag__');
-			});
-			document.body.addEventListener('dragover', function(e) {
-				if(e.target.closest('UL')) e.preventDefault();
-			});
-			document.body.addEventListener('drop', function(e) {
-				if(e.target.tagName == 'UL') {
-					e.preventDefault();
-					e.target.append(document.getElementById('__drag__'));
-				}
-				var z = e.target.closest('li');
-				if(z) {
-					console.log(z);
-					e.preventDefault();
-					z.parentNode.insertBefore(document.getElementById('__drag__'), z);
-				}
-				document.getElementById('__drag__').id='';
-			});
-			
-			document.body.addEventListener("keyup", function(event) {
-			if(event.target.tagName == 'INPUT')
-				if (event.keyCode == 13) {
-					event.target.blur();
-					event.target.parentNode.nextSibling.querySelector('INPUT').focus();
-				}
-			});
 		</script>
 	</body>
 </html>

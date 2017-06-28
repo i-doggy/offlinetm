@@ -1,42 +1,36 @@
-﻿function RealTask(name, isAdditional, isDone) {
+﻿//Количество простыней кода в этом файле зашкаливает//
+
+
+
+function RealTask(name, isAdditional, isDone) {
 	Task.apply(this, [].slice.call(arguments));
-	
-	var el = document.createElement('LI')
-	el.draggable = true;
-	
-	//<div class='checkbox'><span>&#x2713;<span></div>
-	var checkbox = document.createElement('DIV');
-	checkbox.classList.add('checkbox');
-	var check = document.createElement('SPAN');
-	check.innerText = '✓'
-	checkbox.append(check);
-	el.append(checkbox);
-	
-	//div class='additionalpoint
-	var checkbox = document.createElement('DIV');
-	checkbox.classList.add('additionalbox');
-	//var check = document.createElement('SPAN');
-	checkbox.innerText = '+';
-	//checkbox.append(check);
-	el.append(checkbox);
-	
-	var span = document.createElement('INPUT');
-	span.value = name;
-	span.spellcheck = "false";
-	el.append(span);
-	
-	
-	//<div class='deletepoint'>&#x274C;</div>
-	var deletebox = document.createElement('DIV');
-	deletebox.innerText = '❌';
-	deletebox.classList.add('deletebox');
-	el.append(deletebox);
-	
-	el.task = this;
-	this.element = el;
+	//Creating element;
+		var el = mkElement('LI', 'task');
+		el.draggable = true;
+		
+			//<div class='checkbox'><span>&#x2713;<span></div>
+			var checkbox = mkElement('DIV', 'checkbox')
+			var check = mkElement('SPAN', false, '✓');
+			checkbox.append(check);
+			el.append(checkbox);
+		
+			//div class='additionalpoint
+			var checkbox = mkElement('DIV', 'additionalbox', '+');
+			el.append(checkbox);
+		
+			var span = mkElement('INPUT');
+			span.value = name;
+			span.spellcheck = "false";
+			el.append(span);
+		
+			//<div class='deletepoint'>&#x274C;</div>
+			var deletebox = mkElement('DIV', 'deletebox', '❌');
+			el.append(deletebox);
+		
+		el.task = this;
+		this.element = el;
 
 	if(this.isAdditional) this.element.classList.add('additional');
-	this.element.classList.add('task');
 	if(this.done) this.element.classList.add('checked');
 	
 	return this;
@@ -56,55 +50,57 @@ function RealTaskGroup(name /*,tasks...*/) {
 
 RealTaskGroup.prototype = Object.create(TaskGroup.prototype);
 RealTaskGroup.prototype._createElement = function() {
-	var container = document.createElement('SECTION');
+	var container = mkElement('SECTION');
 	
 	//<div class='deletepoint'>&#x274C;</div>
-	var deletebox = document.createElement('DIV');
-	deletebox.innerText = '❌';
-	deletebox.classList.add('deletebox');
-	container.append(deletebox);
+		var deletebox = mkElement('DIV', 'deletebox', '❌');
+		container.append(deletebox);
 	
+	//Making header
+		var header = mkElement('H1');
 		
-	var header = document.createElement('H1');
+		var hid = mkElement('SPAN', 'hider', '>');
+		header.append(hid);
+		
+		var name = mkElement('INPUT');
+		name.value = this.name;
+		
+		header.append(name);
+		container.append(header);
 	
-	var hid = document.createElement('SPAN');
-	hid.innerText = '>';
-	hid.classList.add('hider');
-	header.append(hid);
+	//Adding progress element
+		this.progressElement = mkElement('PROGRESS');
+		
+		this.progressElement.value = 0;
+		
+		container.append(this.progressElement);
 	
-	var name = document.createElement('INPUT');
-	name.value = this.name;
-	header.append(name);
-	container.append(header);
-	this.progressElement = document.createElement('PROGRESS');
-	this.progressElement.value = 0;
+	//Adding UL and inner tasks
+		var ul = mkElement('UL');
+		
+		this.child.forEach(function(e) { 
+			if(e.element.tagName == 'LI') ul.append(e.element);
+			else {
+				var li = mkElement('LI');
+				li.draggable = true;
+				li.append(e.element);
+				ul.append(li)
+			}
+		});
+		
+		//Adding add element
+			var plus = mkElement('LI', 'plus');
+			var task = mkElement('SPAN', 'newtask', 'new Task');
+			var group = mkElement('SPAN', 'newgroup', 'new Group')
+			pluss = mkElement('SPAN', 'spec', '+');
+			
+			plus.append(group);
+			plus.append(pluss);
+			plus.append(task);
+			ul.append(plus);
+		
+		container.append(ul);
 	
-	container.append(this.progressElement);
-	var ul = document.createElement('UL');
-	this.child.forEach(function(e) { 
-		if(e.element.tagName == 'LI') ul.append(e.element);
-		else {
-			var li = document.createElement('LI');
-			li.draggable = true;
-			li.append(e.element);
-			ul.append(li)
-		}});
-	plus = document.createElement('LI');
-	plus.classList.add('plus');
-	var task = document.createElement('SPAN');
-	var group = document.createElement('SPAN');
-	task.innerHTML = 'new Task';
-	group.innerHTML = 'new Group';
-	pluss = document.createElement('SPAN');
-	pluss.classList.add('spec');
-	group.classList.add('newgroup');
-	task.classList.add('newtask');
-	pluss.innerHTML = '+';
-	plus.append(group);
-	plus.append(pluss);
-	plus.append(task);
-	ul.append(plus);
-	container.append(ul);
 	container.taskgroup = this;
 	this.element = container;
 	this.element.ul = ul;
@@ -172,7 +168,6 @@ document.body.addEventListener('click', function(e) {
 		return;
 	}
 	
-	//if(e.target.parentNode.classList.contains('additionalbox'))  liel = e.target.parentNode.parentNode;
 	if(e.target.classList.contains('additionalbox')) liel = e.target.parentNode;
 	if(liel) {
 		liel.classList.toggle('additional');
@@ -205,6 +200,7 @@ document.body.addEventListener('click', function(e) {
 	}
 });
 
+//Update names on change input's value
 document.body.addEventListener('change', function(e) {
 	if(e.target.parentNode.task) e.target.parentNode.task.newName(e.target.value);
 	if(e.target.parentNode.parentNode.taskgroup) e.target.parentNode.parentNode.taskgroup.newName(e.target.value);
@@ -235,4 +231,44 @@ function letUserPlay(node) {
 function letUserPlayGroup(node) {
 	var task = new RealTaskGroup('Group');
 	node.taskgroup.addTask(task);
+}
+
+//Managing Drag'n'drop
+document.body.addEventListener('dragstart', function(e) {
+	e.target.id = '__drag__';
+	//e.dataTransfer.setData('text', '__drag__');
+});
+document.body.addEventListener('dragover', function(e) {
+	if(e.target.closest('UL')) e.preventDefault();
+});
+document.body.addEventListener('drop', function(e) {
+	if(e.target.tagName == 'UL') {
+		e.preventDefault();
+		e.target.append(document.getElementById('__drag__'));
+	}
+	var z = e.target.closest('li');
+	if(z) {
+		console.log(z);
+		e.preventDefault();
+z.parentNode.insertBefore(document.getElementById('__drag__'), z);
+	}
+	document.getElementById('__drag__').id='';
+});
+
+//On press 'enter' go to next task(if any)
+document.body.addEventListener("keyup", function(event) {
+	if(event.target.tagName == 'INPUT')
+	if (event.keyCode == 13) {
+		event.target.blur();
+		var n = event.target.parentNode.nextSibling.querySelector('INPUT'); 
+		if(n) n.focus();
+	}
+});
+//
+
+function mkElement(tag, classN, content) {
+	e = document.createElement(tag);
+	if(classN) e.classList.add(classN);
+	if(content) e.innerText = content;
+	return e;
 }
