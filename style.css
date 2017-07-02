@@ -147,6 +147,7 @@ font-size: 28pt;
 	border-bottom: none;
 	padding: 0.5em;
 	display: grid;
+	/* display: none */
 }
 .plus:hover {
 	grid-template-columns: 1fr 1em 1fr;
@@ -187,6 +188,9 @@ section.hidden .hider {
 	font-weight: ;
 	text-align: center;
 }
+/* section:hover > ul > .plus {
+	display: grid;
+} */
 .newlist:hover {
 	text-shadow: green 0px 0px 1em;
 	cursor: default;
