@@ -1,8 +1,4 @@
-﻿//Количество простыней кода в этом файле зашкаливает//
-
-
-
-function RealTask(name, isAdditional, isDone) {
+﻿function RealTask(name, isAdditional, isDone) {
 	Task.apply(this, [].slice.call(arguments));
 	//Creating element;
 		var el = mkElement('LI', 'task');
