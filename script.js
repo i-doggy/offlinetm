@@ -9,29 +9,25 @@ function RealTask(name, isAdditional, isDone) {
 		el.draggable = true;
 		
 			//<div class='checkbox'><span>&#x2713;<span></div>
-			var checkbox = mkElement('DIV', 'checkbox')
-			var check = mkElement('SPAN', false, '✓');
-			checkbox.append(check);
-			el.append(checkbox);
+			var checkbox = mkElement('DIV', 'checkbox', false, el)
+			checkbox.append(mkElement('SPAN', false, '✓', checkbox));
 		
-			//div class='additionalpoint
-			var checkbox = mkElement('DIV', 'additionalbox', '+');
-			el.append(checkbox);
+			//<div class='additionalpoint'></div>
+			mkElement('DIV', 'additionalbox', '+', el);
 		
-			var span = mkElement('INPUT');
+			//<input value=$name$ spellcheck=false>
+			var span = mkElement('INPUT', false, false, el);
 			span.value = name;
 			span.spellcheck = "false";
-			el.append(span);
 		
 			//<div class='deletepoint'>&#x274C;</div>
-			var deletebox = mkElement('DIV', 'deletebox', '❌');
-			el.append(deletebox);
+			mkElement('DIV', 'deletebox', '❌', el);
 		
 		el.task = this;
 		this.element = el;
 
-	if(this.isAdditional) this.element.classList.add('additional');
-	if(this.done) this.element.classList.add('checked');
+		if(this.isAdditional) this.element.classList.add('additional');
+		if(this.done) this.element.classList.add('checked');
 	
 	return this;
 }
@@ -53,53 +49,38 @@ RealTaskGroup.prototype._createElement = function() {
 	var container = mkElement('SECTION');
 	
 	//<div class='deletepoint'>&#x274C;</div>
-		var deletebox = mkElement('DIV', 'deletebox', '❌');
-		container.append(deletebox);
+		mkElement('DIV', 'deletebox', '❌', container);
 	
 	//Making header
-		var header = mkElement('H1');
+		var header = mkElement('H1', false, false, container);
 		
-		var hid = mkElement('SPAN', 'hider', '>');
-		header.append(hid);
+		mkElement('SPAN', 'hider', '>', header);
 		
-		var name = mkElement('INPUT');
+		var name = mkElement('INPUT', false, false, header);
 		name.value = this.name;
-		
-		header.append(name);
-		container.append(header);
 	
 	//Adding progress element
-		this.progressElement = mkElement('PROGRESS');
+		this.progressElement = mkElement('PROGRESS', false, false, container);
 		
 		this.progressElement.value = 0;
-		
-		container.append(this.progressElement);
 	
 	//Adding UL and inner tasks
-		var ul = mkElement('UL');
+		var ul = mkElement('UL', false, false, container);
 		
 		this.child.forEach(function(e) { 
 			if(e.element.tagName == 'LI') ul.append(e.element);
 			else {
-				var li = mkElement('LI');
+				var li = mkElement('LI', false, false, ul);
 				li.draggable = true;
 				li.append(e.element);
-				ul.append(li)
 			}
 		});
 		
 		//Adding add element
-			var plus = mkElement('LI', 'plus');
-			var task = mkElement('SPAN', 'newtask', 'new Task');
-			var group = mkElement('SPAN', 'newgroup', 'new Group')
-			pluss = mkElement('SPAN', 'spec', '+');
-			
-			plus.append(group);
-			plus.append(pluss);
-			plus.append(task);
-			ul.append(plus);
-		
-		container.append(ul);
+			var plus = mkElement('LI', 'plus', false, ul);
+			mkElement('SPAN', 'newtask', 'new Task', plus);
+			pluss = mkElement('SPAN', 'spec', '+', plus);
+			mkElement('SPAN', 'newgroup', 'new Group', plus)
 	
 	container.taskgroup = this;
 	this.element = container;
@@ -138,8 +119,8 @@ RealTaskGroup.prototype.renderProgress = function() {
 
 document.body.addEventListener('click', function(e) {
 	var liel = false;
-	if(e.target.classList.contains('checkbox')) liel = e.target.parentNode;
-	if(e.target.parentNode.classList.contains('checkbox'))  liel = e.target.parentNode.parentNode;
+	
+	if(e.target.closest('.checkbox')) liel = e.target.closest('.checkbox').parentNode;
 	if(liel) {
 		liel.classList.toggle('checked');
 		liel.task.toggleDone();
@@ -163,7 +144,6 @@ document.body.addEventListener('click', function(e) {
 	
 	if(e.target.classList.contains('hider')) liel = e.target.parentNode.parentNode;
 	if(liel) {
-		console.log(liel);
 		liel.classList.toggle('hidden');
 		return;
 	}
@@ -179,17 +159,21 @@ document.body.addEventListener('click', function(e) {
 		if(e.target.classList.contains('newtask')) {
 			var p = e.target.parentNode.parentNode;
 			var z = e.target.parentNode;
-			letUserPlay(p.parentNode);
+			var task = new RealTask('Task', 0, 0);
+			p.parentNode.taskgroup.addTask(task);
+			task.element.querySelector('INPUT').focus();
 			p.append(z);
 			return;
 		}
 		if(e.target.classList.contains('newgroup')) {
 			var p = e.target.parentNode.parentNode;
 			var z = e.target.parentNode;
-			letUserPlayGroup(p.parentNode);
+			var task = new RealTaskGroup('Group');
+			p.parentNode.taskgroup.addTask(task);
 			p.append(z);
 			return;
 		}
+		return;
 	}
 	if(e.target.classList.contains('newlist')) {
 		var z = e.target;
@@ -206,12 +190,12 @@ document.body.addEventListener('change', function(e) {
 	if(e.target.parentNode.parentNode.taskgroup) e.target.parentNode.parentNode.taskgroup.newName(e.target.value);
 });
 
-function loadSavedData(str) {
+RealTaskGroup.loadSavedData = function loadSavedData(str) {
 	var obj = JSON.parse(str);
-	return run(obj);
+	return RealTaskGroup._run(obj);
 }
 
-function run(obj) {
+RealTaskGroup._run = function run(obj) {
 		return Object.keys(obj).reduce(function(p, e) {
 			var r = new RealTaskGroup(e);
 			var buf = obj[e].map(function(e1) {
@@ -227,6 +211,7 @@ function run(obj) {
 function letUserPlay(node) {
 	var task = new RealTask('Task', 0, 0);
 	node.taskgroup.addTask(task);
+	task.element.querySelector('INPUT').focus();
 }
 function letUserPlayGroup(node) {
 	var task = new RealTaskGroup('Group');
@@ -248,27 +233,33 @@ document.body.addEventListener('drop', function(e) {
 	}
 	var z = e.target.closest('li');
 	if(z) {
-		console.log(z);
 		e.preventDefault();
-z.parentNode.insertBefore(document.getElementById('__drag__'), z);
+		z.parentNode.insertBefore(document.getElementById('__drag__'), z);
 	}
 	document.getElementById('__drag__').id='';
 });
 
-//On press 'enter' go to next task(if any)
+//On press 'enter' go to next task(if any) or create new if has not
 document.body.addEventListener("keyup", function(event) {
 	if(event.target.tagName == 'INPUT')
 	if (event.keyCode == 13) {
 		event.target.blur();
-		var n = event.target.parentNode.nextSibling.querySelector('INPUT'); 
+		var n = event.target.parentNode.nextSibling.querySelector('INPUT');
 		if(n) n.focus();
+		else {
+			n = event.target.closest('UL');
+			s = n.querySelector('.newtask');
+			s.click();
+		}
 	}
 });
-//
 
-function mkElement(tag, classN, content) {
+function mkElement(tag, classN, content, par) {
 	e = document.createElement(tag);
 	if(classN) e.classList.add(classN);
 	if(content) e.innerText = content;
+	if(par)
+		if(par.append) par.append(e);
+		else throw Error('par is not an HTML element(has no append method)');
 	return e;
 }

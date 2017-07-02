@@ -79,13 +79,16 @@ TaskGroup.prototype.addTask = function (t, index) {
 		if(t.isAdditional) this.additionalLength++;
 		if(t.additionalLength) this.additionalLength = this.additionalLength + t.additionalLength;
 		//Actually add
-		if(index !== undefined && index.inRange(-(this.child.length), this.child.length)) this.child.splice(index, 0, t);
+		if(index !== undefined) {
+			if(index.inRange(-(this.child.length), this.child.length)) this.child.splice(index, 0, t);
+			else throw Error('Out of range');
+		}
 		else this.child.push(t);
 		//Return added
 		return t;
 }
 TaskGroup.prototype.getProgress = function() { //returns number of done not additional tasks in group
-	return this.child.reduce(function(p, e) { 
+	return this.child.reduce(function(p, e) {
 		return p + e.progress;
 	}, 0);
 }

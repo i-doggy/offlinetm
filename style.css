@@ -1,13 +1,9 @@
 ﻿body {
 	margin: 0 20%;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
+	font-family: Open Sans;
 }
 .checked { 
 	background: linear-gradient(to left, white, skyblue) !important;
-}
-.additional {
-	//background: linear-gradient(to left, white, green) !important;
 }
 .checked.additional { 
 	background: linear-gradient(to left, white, greenyellow);
@@ -29,15 +25,17 @@ progress[value] {
 	-webkit-border: none;
 	height: 20px;
 }
+body > section {
+	margin: 1em 0;
+	border: 1px solid black;
+}
 section {
 	position: relative;
     border: none;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
     padding: 0;
-}
-body > section {
-	margin: 1em 0;
+	margin: 0 1em;
 }
 section > .deletebox {
 	top: 0;
@@ -80,9 +78,6 @@ h1 > input {
 	color: black;
 	margin: auto 1.5em;
 	background: transparent;
-	min-height: 1.1em;
-	height: 1.1em;
-	-webkit-apperance: none;
 	font: inherit;
 	font-size: inherit;
 	border: none;
@@ -102,7 +97,6 @@ h1 > input {
 	grid-area: c;
 }
 .task .additionalbox {
-	//margin: auto -5px;
 	grid-area: a;
 }
 .deletebox {
@@ -155,13 +149,14 @@ font-size: 28pt;
 	display: grid;
 }
 .plus:hover {
-	grid-template-columns: 33.5% 33% 33%;
+	grid-template-columns: 1fr 1em 1fr;
 }
 
 .plus span {
 	display: none;
 	cursor: default;
-}
+	margin: auto 0;
+} 
 .plus .spec {
 	display: inline;
 	font-size: 20pt;

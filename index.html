@@ -5,42 +5,6 @@
 		<link rel='stylesheet' href='style.css'>
 	</head>
 	<body>
-		<!--section>
-			<h1>Your task list</h1>
-			<progress max=7 value=4></progress>
-			<ul>
-				<li class='taskgroup'>
-					<section>
-						<h1><input value='Group Name'></h1>
-						<progress max=7 value=4></progress>
-						<ul>
-							<li class='task checked'>Task Name11</li>
-							<li class='task'>Task Name12</li>
-							<li class='task'>Task Name13</li>
-							<li class='task checked'>Task Name14</li>
-							<li class='task'>Task Name15</li>
-							<li class='task checked'>Task Name16</li>
-							<li class='task'>Task Name17</li>
-							<li class='plus'>+</li>
-						</ul>
-					</section>
-				</li>
-				<li class='task'>Task Name2</li>
-				<li>
-					<section>
-						<h1><input value='Group Name'></h1>
-						<progress max=7 value=4></progress>
-						<ul>
-							<li class='task checked'><div class='checkbox'><span>&#x2713;<span></div><span contenteditable>Task Name31</span><div class='deletebox'>&#x274C;</div></li>
-							<li class='task checked'><div class='checkbox'><span>&#x2713;<span></div><span contenteditable>Task Name32</span><div class='deletebox'>&#x274C;</div></li>
-							<li class='task checked'><div class='checkbox'><span>&#x2713;<span></div><span contenteditable>Task Name33</span><div class='deletebox'>&#x274C;</div></li>
-							<li class='plus'>+</li>
-						</ul>
-					</section>
-				</li>
-				<li class='plus'>+</li>
-			</ul>
-		</section-->
 		<script src='pureClasses.js'></script>
 		<script src='script.js'></script>
 		<script defer>
@@ -51,7 +15,7 @@
 				for(;i < saved; i++) {
 					var z = window.localStorage.getItem(i.toString());
 					if(z) {
-						var l = loadSavedData(z);
+						var l = RealTaskGroup.loadSavedData(z);
 						document.body.append(l.element);
 					}
 				}
